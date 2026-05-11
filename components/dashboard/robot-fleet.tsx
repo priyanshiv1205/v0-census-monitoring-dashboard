@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
 import {
   Bot,
   Battery,
@@ -14,23 +15,109 @@ import {
   CheckCircle2,
   AlertTriangle,
   XCircle,
+  Droplets,
+  Play,
+  Pause,
+  RotateCcw,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const robotFleetData = [
-  { id: "SWR-001", status: "active", battery: 92, zone: "Delhi NCR", connectivity: "excellent", lastSync: "2s ago", sensorHealth: 100 },
-  { id: "SWR-015", status: "active", battery: 78, zone: "Mumbai Central", connectivity: "good", lastSync: "5s ago", sensorHealth: 98 },
-  { id: "SWR-023", status: "warning", battery: 34, zone: "Kolkata East", connectivity: "good", lastSync: "12s ago", sensorHealth: 95 },
-  { id: "SWR-042", status: "active", battery: 88, zone: "Bangalore Tech", connectivity: "excellent", lastSync: "1s ago", sensorHealth: 100 },
-  { id: "SWR-056", status: "maintenance", battery: 15, zone: "Hyderabad HQ", connectivity: "poor", lastSync: "45s ago", sensorHealth: 72 },
-  { id: "SWR-078", status: "active", battery: 95, zone: "Pune West", connectivity: "excellent", lastSync: "3s ago", sensorHealth: 99 },
-  { id: "SWR-089", status: "active", battery: 67, zone: "Chennai South", connectivity: "good", lastSync: "8s ago", sensorHealth: 96 },
-  { id: "SWR-101", status: "warning", battery: 42, zone: "Jaipur Central", connectivity: "moderate", lastSync: "20s ago", sensorHealth: 88 },
+  { 
+    id: "CLN-001", 
+    status: "cleaning", 
+    battery: 78, 
+    zone: "Zone A", 
+    targetPanel: "A-03",
+    connectivity: "excellent", 
+    lastSync: "2s ago", 
+    panelsCleaned: 12,
+    waterLevel: 65,
+  },
+  { 
+    id: "CLN-002", 
+    status: "cleaning", 
+    battery: 85, 
+    zone: "Zone B", 
+    targetPanel: "B-02",
+    connectivity: "excellent", 
+    lastSync: "1s ago", 
+    panelsCleaned: 15,
+    waterLevel: 72,
+  },
+  { 
+    id: "CLN-003", 
+    status: "returning", 
+    battery: 22, 
+    zone: "Zone C", 
+    targetPanel: "-",
+    connectivity: "good", 
+    lastSync: "5s ago", 
+    panelsCleaned: 28,
+    waterLevel: 15,
+  },
+  { 
+    id: "CLN-004", 
+    status: "cleaning", 
+    battery: 92, 
+    zone: "Zone D", 
+    targetPanel: "D-04",
+    connectivity: "excellent", 
+    lastSync: "1s ago", 
+    panelsCleaned: 8,
+    waterLevel: 88,
+  },
+  { 
+    id: "CLN-005", 
+    status: "moving", 
+    battery: 67, 
+    zone: "Zone A", 
+    targetPanel: "A-04",
+    connectivity: "good", 
+    lastSync: "3s ago", 
+    panelsCleaned: 18,
+    waterLevel: 54,
+  },
+  { 
+    id: "CLN-006", 
+    status: "moving", 
+    battery: 74, 
+    zone: "Zone C", 
+    targetPanel: "C-07",
+    connectivity: "moderate", 
+    lastSync: "8s ago", 
+    panelsCleaned: 14,
+    waterLevel: 62,
+  },
+  { 
+    id: "CLN-007", 
+    status: "idle", 
+    battery: 100, 
+    zone: "Base", 
+    targetPanel: "-",
+    connectivity: "excellent", 
+    lastSync: "1s ago", 
+    panelsCleaned: 0,
+    waterLevel: 100,
+  },
+  { 
+    id: "CLN-008", 
+    status: "maintenance", 
+    battery: 45, 
+    zone: "Base", 
+    targetPanel: "-",
+    connectivity: "poor", 
+    lastSync: "2m ago", 
+    panelsCleaned: 35,
+    waterLevel: 30,
+  },
 ]
 
 const statusConfig = {
-  active: { icon: CheckCircle2, color: "text-chart-3", bg: "bg-chart-3/10", border: "border-chart-3/30", label: "Active" },
-  warning: { icon: AlertTriangle, color: "text-yellow-500", bg: "bg-yellow-500/10", border: "border-yellow-500/30", label: "Warning" },
+  cleaning: { icon: Droplets, color: "text-primary", bg: "bg-primary/10", border: "border-primary/30", label: "Cleaning" },
+  moving: { icon: Activity, color: "text-accent", bg: "bg-accent/10", border: "border-accent/30", label: "Moving" },
+  idle: { icon: CheckCircle2, color: "text-chart-3", bg: "bg-chart-3/10", border: "border-chart-3/30", label: "Idle" },
+  returning: { icon: RotateCcw, color: "text-yellow-500", bg: "bg-yellow-500/10", border: "border-yellow-500/30", label: "Returning" },
   maintenance: { icon: XCircle, color: "text-destructive", bg: "bg-destructive/10", border: "border-destructive/30", label: "Maintenance" },
 }
 
@@ -42,17 +129,25 @@ const connectivityConfig = {
 }
 
 export function RobotFleetTable() {
+  const activeCount = robotFleetData.filter(r => r.status === "cleaning" || r.status === "moving").length
+  const totalCleaned = robotFleetData.reduce((sum, r) => sum + r.panelsCleaned, 0)
+
   return (
     <Card className="glass-card border-border/50">
       <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-2">
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
             <Bot className="h-5 w-5 text-primary" />
-            Robot Fleet Status
+            Cleaning Robot Fleet
           </CardTitle>
-          <Badge variant="outline" className="bg-primary/10 border-primary/30 text-primary">
-            {robotFleetData.length} Units
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="bg-primary/10 border-primary/30 text-primary">
+              {activeCount} Active
+            </Badge>
+            <Badge variant="outline" className="bg-chart-3/10 border-chart-3/30 text-chart-3">
+              {totalCleaned} Panels Cleaned
+            </Badge>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -63,10 +158,11 @@ export function RobotFleetTable() {
                 <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Robot ID</th>
                 <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
                 <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Battery</th>
-                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Zone</th>
-                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Connectivity</th>
-                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Last Sync</th>
-                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Sensor Health</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Water</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Target</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Signal</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Cleaned</th>
+                <th className="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -94,7 +190,7 @@ export function RobotFleetTable() {
                     </td>
                     <td className="py-3 px-4">
                       <Badge variant="outline" className={cn(status.bg, status.border, status.color, "gap-1")}>
-                        <StatusIcon className="h-3 w-3" />
+                        <StatusIcon className={cn("h-3 w-3", robot.status === "cleaning" && "animate-pulse")} />
                         {status.label}
                       </Badge>
                     </td>
@@ -104,14 +200,14 @@ export function RobotFleetTable() {
                           "h-4 w-4",
                           robot.battery > 50 ? "text-chart-3" : robot.battery > 20 ? "text-yellow-500" : "text-destructive"
                         )} />
-                        <div className="w-16">
+                        <div className="w-14">
                           <Progress 
                             value={robot.battery} 
                             className="h-1.5"
                           />
                         </div>
                         <span className={cn(
-                          "text-xs font-medium",
+                          "text-xs font-medium w-8",
                           robot.battery > 50 ? "text-chart-3" : robot.battery > 20 ? "text-yellow-500" : "text-destructive"
                         )}>
                           {robot.battery}%
@@ -119,7 +215,28 @@ export function RobotFleetTable() {
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <span className="text-sm text-foreground">{robot.zone}</span>
+                      <div className="flex items-center gap-2">
+                        <Droplets className={cn(
+                          "h-4 w-4",
+                          robot.waterLevel > 50 ? "text-primary" : robot.waterLevel > 20 ? "text-yellow-500" : "text-destructive"
+                        )} />
+                        <div className="w-14">
+                          <Progress 
+                            value={robot.waterLevel} 
+                            className="h-1.5"
+                          />
+                        </div>
+                        <span className={cn(
+                          "text-xs font-medium w-8",
+                          robot.waterLevel > 50 ? "text-primary" : robot.waterLevel > 20 ? "text-yellow-500" : "text-destructive"
+                        )}>
+                          {robot.waterLevel}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className="text-sm text-foreground">{robot.targetPanel}</span>
+                      <span className="text-xs text-muted-foreground block">{robot.zone}</span>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
@@ -140,22 +257,25 @@ export function RobotFleetTable() {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">{robot.lastSync}</span>
+                        <CheckCircle2 className="h-3 w-3 text-chart-3" />
+                        <span className="text-sm font-medium text-chart-3">{robot.panelsCleaned}</span>
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <div className="flex items-center gap-2">
-                        <Activity className={cn(
-                          "h-4 w-4",
-                          robot.sensorHealth >= 95 ? "text-chart-3" : robot.sensorHealth >= 80 ? "text-yellow-500" : "text-destructive"
-                        )} />
-                        <span className={cn(
-                          "text-sm font-medium",
-                          robot.sensorHealth >= 95 ? "text-chart-3" : robot.sensorHealth >= 80 ? "text-yellow-500" : "text-destructive"
-                        )}>
-                          {robot.sensorHealth}%
-                        </span>
+                      <div className="flex items-center gap-1">
+                        {robot.status === "idle" && (
+                          <Button size="icon" variant="outline" className="h-7 w-7 border-chart-3/30">
+                            <Play className="h-3 w-3 text-chart-3" />
+                          </Button>
+                        )}
+                        {(robot.status === "cleaning" || robot.status === "moving") && (
+                          <Button size="icon" variant="outline" className="h-7 w-7 border-yellow-500/30">
+                            <Pause className="h-3 w-3 text-yellow-500" />
+                          </Button>
+                        )}
+                        <Button size="icon" variant="outline" className="h-7 w-7 border-primary/30">
+                          <RotateCcw className="h-3 w-3 text-primary" />
+                        </Button>
                       </div>
                     </td>
                   </motion.tr>

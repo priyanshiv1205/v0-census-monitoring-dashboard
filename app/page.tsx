@@ -3,13 +3,14 @@
 import { Navbar } from "@/components/dashboard/navbar"
 import { Hero } from "@/components/dashboard/hero"
 import { StatCards } from "@/components/dashboard/stat-cards"
-import { RobotTrackingMap } from "@/components/dashboard/robot-map"
+import { SolarPanelMap } from "@/components/dashboard/solar-panel-map"
 import { RobotFleetTable } from "@/components/dashboard/robot-fleet"
 import {
-  AgeDistributionChart,
-  GenderRatioChart,
-  AreaDensityChart,
-  DailySurveyChart,
+  DustSensorChart,
+  TemperatureSensorChart,
+  VoltageCurrentChart,
+  CleaningStatusChart,
+  PowerEfficiencyChart,
 } from "@/components/dashboard/charts"
 import { AlertsPanel } from "@/components/dashboard/alerts-panel"
 import { CloudStatusPanel } from "@/components/dashboard/cloud-status"
@@ -26,6 +27,7 @@ export default function DashboardPage() {
     }, 1000)
     return () => clearInterval(interval)
   }, [])
+
   return (
     <div className="min-h-screen bg-background relative">
       {/* Animated background */}
@@ -44,23 +46,34 @@ export default function DashboardPage() {
           <StatCards />
         </section>
 
-        {/* Main Grid - Map and Alerts */}
+        {/* Main Grid - Solar Panel Map and Alerts */}
         <section className="grid gap-6 lg:grid-cols-3 mb-6">
-          <RobotTrackingMap />
+          <SolarPanelMap />
           <AlertsPanel />
         </section>
 
-        {/* Census Analytics Charts */}
+        {/* Sensor Analytics Charts */}
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span className="h-1 w-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full" />
+            Sensor Analytics
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <DustSensorChart />
+            <TemperatureSensorChart />
+            <VoltageCurrentChart />
+          </div>
+        </section>
+
+        {/* Cleaning Analytics */}
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <span className="h-1 w-8 bg-gradient-to-r from-primary to-accent rounded-full" />
-            Census Analytics
+            Cleaning Analytics
           </h2>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            <AgeDistributionChart />
-            <GenderRatioChart />
-            <AreaDensityChart />
-            <DailySurveyChart />
+          <div className="grid gap-6 md:grid-cols-2">
+            <CleaningStatusChart />
+            <PowerEfficiencyChart />
           </div>
         </section>
 
@@ -68,7 +81,7 @@ export default function DashboardPage() {
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <span className="h-1 w-8 bg-gradient-to-r from-accent to-chart-3 rounded-full" />
-            Robot Fleet Status
+            Cleaning Robot Fleet
           </h2>
           <RobotFleetTable />
         </section>
@@ -76,8 +89,8 @@ export default function DashboardPage() {
         {/* Cloud Integration */}
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <span className="h-1 w-8 bg-gradient-to-r from-chart-3 to-chart-4 rounded-full" />
-            Cloud Integration
+            <span className="h-1 w-8 bg-gradient-to-r from-[#FF9900] to-orange-500 rounded-full" />
+            AWS Cloud Integration
           </h2>
           <CloudStatusPanel />
         </section>
@@ -88,11 +101,11 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-chart-3 pulse-live" />
               <span className="text-sm text-muted-foreground">
-                System Status: All services operational
+                System Status: All sensors and robots operational
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Swarm Sense v2.0 | Powered by AWS IoT & AI | Last sync: {currentTime || "Loading..."}
+              SolarSwarm v1.0 | Powered by AWS IoT Core | Last sync: {currentTime || "Loading..."}
             </p>
           </div>
         </footer>

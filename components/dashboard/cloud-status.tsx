@@ -12,6 +12,9 @@ import {
   Activity,
   ArrowUpRight,
   ArrowDownRight,
+  Wind,
+  Thermometer,
+  Zap,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -20,33 +23,33 @@ const cloudServices = [
     name: "AWS IoT Core",
     status: "connected",
     icon: Cloud,
-    description: "Real-time device connectivity",
-    metrics: { messages: "2.4M/hr", latency: "12ms" },
+    description: "Sensor data ingestion",
+    metrics: { messages: "1.8M/hr", latency: "8ms" },
     gradient: "from-[#FF9900] to-[#FF9900]/60",
   },
   {
-    name: "MQTT Stream",
+    name: "Dust Sensor Stream",
     status: "active",
-    icon: Radio,
-    description: "Live telemetry data pipeline",
-    metrics: { throughput: "850 MB/s", connections: "2,847" },
-    gradient: "from-primary to-primary/60",
+    icon: Wind,
+    description: "Real-time dust readings",
+    metrics: { throughput: "420 MB/s", sensors: "1,284" },
+    gradient: "from-orange-500 to-orange-500/60",
   },
   {
-    name: "Firebase Backup",
-    status: "syncing",
-    icon: Database,
-    description: "Real-time database replication",
-    metrics: { synced: "99.8%", lastBackup: "12s ago" },
-    gradient: "from-[#FFCA28] to-[#FFCA28]/60",
+    name: "Temperature Monitor",
+    status: "active",
+    icon: Thermometer,
+    description: "Panel thermal analysis",
+    metrics: { readings: "5.2k/sec", zones: "4 active" },
+    gradient: "from-red-500 to-red-500/60",
   },
   {
-    name: "Edge AI Processing",
+    name: "Power Analytics",
     status: "enabled",
-    icon: Cpu,
-    description: "On-device ML inference",
-    metrics: { models: "12 active", accuracy: "98.7%" },
-    gradient: "from-accent to-accent/60",
+    icon: Zap,
+    description: "Voltage & current tracking",
+    metrics: { efficiency: "94.2%", output: "10.78 kW" },
+    gradient: "from-primary to-primary/60",
   },
 ]
 
@@ -61,10 +64,10 @@ export function CloudStatusPanel() {
   return (
     <Card className="glass-card border-border/50">
       <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-2">
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <Cloud className="h-5 w-5 text-primary" />
-            Cloud Integration Status
+            <Cloud className="h-5 w-5 text-[#FF9900]" />
+            AWS Cloud Integration
           </CardTitle>
           <Badge variant="outline" className="bg-chart-3/10 border-chart-3/30 text-chart-3 gap-1">
             <CheckCircle2 className="h-3 w-3" />
@@ -73,7 +76,7 @@ export function CloudStatusPanel() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {cloudServices.map((service, index) => {
             const status = statusConfig[service.status as keyof typeof statusConfig]
             const ServiceIcon = service.icon
@@ -129,29 +132,29 @@ export function CloudStatusPanel() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-4 p-4 rounded-xl bg-gradient-to-r from-primary/10 via-accent/10 to-chart-3/10 border border-primary/20"
+          className="mt-4 p-4 rounded-xl bg-gradient-to-r from-[#FF9900]/10 via-orange-500/10 to-primary/10 border border-[#FF9900]/20"
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <Activity className="h-5 w-5 text-primary animate-pulse" />
+              <Activity className="h-5 w-5 text-[#FF9900] animate-pulse" />
               <div>
-                <p className="text-sm font-medium text-foreground">Real-Time Data Flow</p>
-                <p className="text-xs text-muted-foreground">Processing 2.4M events per hour</p>
+                <p className="text-sm font-medium text-foreground">Real-Time Sensor Data Flow</p>
+                <p className="text-xs text-muted-foreground">Processing sensor readings from 1,284 panels</p>
               </div>
             </div>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
                 <ArrowUpRight className="h-4 w-4 text-chart-3" />
                 <div>
-                  <p className="text-sm font-bold text-chart-3">1.2 GB/s</p>
-                  <p className="text-[10px] text-muted-foreground">Upload</p>
+                  <p className="text-sm font-bold text-chart-3">856 MB/s</p>
+                  <p className="text-[10px] text-muted-foreground">Sensor Data</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <ArrowDownRight className="h-4 w-4 text-primary" />
                 <div>
-                  <p className="text-sm font-bold text-primary">856 MB/s</p>
-                  <p className="text-[10px] text-muted-foreground">Download</p>
+                  <p className="text-sm font-bold text-primary">124 MB/s</p>
+                  <p className="text-[10px] text-muted-foreground">Commands</p>
                 </div>
               </div>
             </div>

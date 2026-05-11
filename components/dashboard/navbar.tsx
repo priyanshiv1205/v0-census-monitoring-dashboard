@@ -13,17 +13,19 @@ import {
   User,
   Menu,
   X,
+  Sun,
 } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: Bot, label: "Robot Fleet", active: false },
-  { icon: BarChart3, label: "Census Analytics", active: false },
+  { icon: Sun, label: "Solar Panels", active: false },
+  { icon: Bot, label: "Cleaning Robots", active: false },
+  { icon: BarChart3, label: "Sensor Analytics", active: false },
   { icon: Radio, label: "Live Monitoring", active: false },
   { icon: AlertTriangle, label: "Alerts", active: false },
-  { icon: Cloud, label: "Cloud Sync", active: false },
+  { icon: Cloud, label: "AWS Cloud", active: false },
   { icon: Settings, label: "Settings", active: false },
 ]
 
@@ -35,7 +37,7 @@ export function Navbar() {
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed top-0 left-0 right-0 z-50 glass border-b border-primary/20"
+      className="fixed top-0 left-0 right-0 z-50 glass border-b border-yellow-500/20"
     >
       <div className="max-w-[1800px] mx-auto px-4 lg:px-6">
         <div className="flex h-16 items-center justify-between">
@@ -45,19 +47,19 @@ export function Navbar() {
             whileHover={{ scale: 1.02 }}
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-primary/30 blur-xl rounded-full" />
-              <div className="relative h-10 w-10 rounded-xl bg-gradient-to-br from-primary via-accent to-chart-3 p-[2px]">
+              <div className="absolute inset-0 bg-yellow-500/30 blur-xl rounded-full" />
+              <div className="relative h-10 w-10 rounded-xl bg-gradient-to-br from-yellow-500 via-orange-500 to-primary p-[2px]">
                 <div className="h-full w-full rounded-xl bg-background flex items-center justify-center">
-                  <Bot className="h-5 w-5 text-primary" />
+                  <Sun className="h-5 w-5 text-yellow-500" />
                 </div>
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold bg-gradient-to-r from-primary via-accent to-chart-3 bg-clip-text text-transparent">
-                Swarm Sense
+              <span className="text-lg font-bold bg-gradient-to-r from-yellow-500 via-orange-500 to-primary bg-clip-text text-transparent">
+                SolarSwarm
               </span>
               <span className="text-[10px] text-muted-foreground font-medium tracking-wider uppercase">
-                AI Census Monitor
+                Panel Monitoring System
               </span>
             </div>
           </motion.div>
@@ -71,7 +73,7 @@ export function Navbar() {
                 className={cn(
                   "relative flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200",
                   activeTab === item.label
-                    ? "text-primary"
+                    ? "text-yellow-500"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                 )}
                 whileHover={{ scale: 1.02 }}
@@ -82,7 +84,7 @@ export function Navbar() {
                 {activeTab === item.label && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute inset-0 bg-primary/10 border border-primary/30 rounded-lg -z-10"
+                    className="absolute inset-0 bg-yellow-500/10 border border-yellow-500/30 rounded-lg -z-10"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -103,7 +105,7 @@ export function Navbar() {
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass-card cursor-pointer"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center">
                 <User className="h-4 w-4 text-primary-foreground" />
               </div>
               <span className="hidden md:block text-sm font-medium">Admin</span>
@@ -141,7 +143,7 @@ export function Navbar() {
                 className={cn(
                   "flex w-full items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors",
                   activeTab === item.label
-                    ? "bg-primary/10 text-primary border border-primary/30"
+                    ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/30"
                     : "text-muted-foreground hover:bg-secondary/50"
                 )}
               >

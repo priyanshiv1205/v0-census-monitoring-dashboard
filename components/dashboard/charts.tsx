@@ -23,78 +23,91 @@ import {
   CartesianGrid,
   Area,
   AreaChart,
-  RadialBar,
-  RadialBarChart,
 } from "recharts"
-import { BarChart3, PieChartIcon, TrendingUp, Users } from "lucide-react"
+import { Wind, Thermometer, Zap, Activity } from "lucide-react"
 
-// Age Distribution Data
-const ageDistributionData = [
-  { age: "0-14", population: 248, fill: "var(--color-chart-1)" },
-  { age: "15-24", population: 195, fill: "var(--color-chart-2)" },
-  { age: "25-44", population: 312, fill: "var(--color-chart-3)" },
-  { age: "45-64", population: 187, fill: "var(--color-chart-4)" },
-  { age: "65+", population: 105, fill: "var(--color-chart-5)" },
+// Dust Sensor Data (24 hours)
+const dustSensorData = [
+  { time: "00:00", panel1: 12, panel2: 15, panel3: 18, panel4: 14 },
+  { time: "04:00", panel1: 18, panel2: 22, panel3: 25, panel4: 20 },
+  { time: "08:00", panel1: 28, panel2: 32, panel3: 38, panel4: 30 },
+  { time: "12:00", panel1: 42, panel2: 48, panel3: 55, panel4: 45 },
+  { time: "16:00", panel1: 55, panel2: 62, panel3: 70, panel4: 58 },
+  { time: "20:00", panel1: 48, panel2: 52, panel3: 58, panel4: 50 },
+  { time: "Now", panel1: 42, panel2: 45, panel3: 52, panel4: 44 },
 ]
 
-const ageConfig = {
-  "0-14": { label: "0-14 years", color: "var(--color-chart-1)" },
-  "15-24": { label: "15-24 years", color: "var(--color-chart-2)" },
-  "25-44": { label: "25-44 years", color: "var(--color-chart-3)" },
-  "45-64": { label: "45-64 years", color: "var(--color-chart-4)" },
-  "65+": { label: "65+ years", color: "var(--color-chart-5)" },
-  population: { label: "Population (M)", color: "var(--color-primary)" },
+const dustConfig = {
+  panel1: { label: "Zone A", color: "var(--color-chart-1)" },
+  panel2: { label: "Zone B", color: "var(--color-chart-2)" },
+  panel3: { label: "Zone C", color: "var(--color-chart-3)" },
+  panel4: { label: "Zone D", color: "var(--color-chart-4)" },
 } satisfies ChartConfig
 
-// Gender Ratio Data
-const genderRatioData = [
-  { name: "Male", value: 51.4, fill: "var(--color-chart-1)" },
-  { name: "Female", value: 48.6, fill: "var(--color-chart-4)" },
+// Temperature Sensor Data (24 hours)
+const temperatureData = [
+  { time: "00:00", ambient: 22, panel: 24, optimal: 25 },
+  { time: "04:00", ambient: 20, panel: 22, optimal: 25 },
+  { time: "08:00", ambient: 28, panel: 35, optimal: 25 },
+  { time: "12:00", ambient: 38, panel: 52, optimal: 25 },
+  { time: "16:00", ambient: 42, panel: 58, optimal: 25 },
+  { time: "20:00", ambient: 32, panel: 42, optimal: 25 },
+  { time: "Now", ambient: 28, panel: 36, optimal: 25 },
 ]
 
-const genderConfig = {
-  male: { label: "Male", color: "var(--color-chart-1)" },
-  female: { label: "Female", color: "var(--color-chart-4)" },
+const temperatureConfig = {
+  ambient: { label: "Ambient Temp", color: "var(--color-chart-1)" },
+  panel: { label: "Panel Temp", color: "var(--color-destructive)" },
+  optimal: { label: "Optimal", color: "var(--color-chart-3)" },
 } satisfies ChartConfig
 
-// Area Density Data
-const areaDensityData = [
-  { area: "Urban", density: 4200 },
-  { area: "Semi-Urban", density: 1800 },
-  { area: "Rural", density: 620 },
-  { area: "Tribal", density: 180 },
-  { area: "Remote", density: 45 },
+// Voltage Output Data
+const voltageData = [
+  { time: "06:00", voltage: 180, current: 8 },
+  { time: "08:00", voltage: 320, current: 18 },
+  { time: "10:00", voltage: 380, current: 26 },
+  { time: "12:00", voltage: 410, current: 32 },
+  { time: "14:00", voltage: 395, current: 30 },
+  { time: "16:00", voltage: 350, current: 24 },
+  { time: "18:00", voltage: 220, current: 12 },
+  { time: "Now", voltage: 385, current: 28 },
 ]
 
-const densityConfig = {
-  density: { label: "Density (per km²)", color: "var(--color-primary)" },
+const voltageConfig = {
+  voltage: { label: "Voltage (V)", color: "var(--color-primary)" },
+  current: { label: "Current (A)", color: "var(--color-accent)" },
 } satisfies ChartConfig
 
-// Daily Survey Data
-const dailySurveyData = [
-  { day: "Mon", completed: 12400, target: 15000 },
-  { day: "Tue", completed: 14200, target: 15000 },
-  { day: "Wed", completed: 15800, target: 15000 },
-  { day: "Thu", completed: 13600, target: 15000 },
-  { day: "Fri", completed: 16200, target: 15000 },
-  { day: "Sat", completed: 11800, target: 12000 },
-  { day: "Sun", completed: 8400, target: 10000 },
+// Cleaning Status Pie Data
+const cleaningStatusData = [
+  { name: "Clean", value: 847, fill: "var(--color-chart-3)" },
+  { name: "Needs Cleaning", value: 312, fill: "var(--color-chart-1)" },
+  { name: "Cleaning In Progress", value: 87, fill: "var(--color-accent)" },
+  { name: "Validation Pending", value: 38, fill: "var(--color-chart-4)" },
 ]
 
-const surveyConfig = {
-  completed: { label: "Completed", color: "var(--color-chart-3)" },
-  target: { label: "Target", color: "var(--color-muted-foreground)" },
+const cleaningConfig = {
+  clean: { label: "Clean", color: "var(--color-chart-3)" },
+  needsCleaning: { label: "Needs Cleaning", color: "var(--color-chart-1)" },
+  inProgress: { label: "In Progress", color: "var(--color-accent)" },
+  validation: { label: "Validation", color: "var(--color-chart-4)" },
 } satisfies ChartConfig
 
-// Population Heatmap Data
-const heatmapData = [
-  { zone: "Zone A", mon: 85, tue: 92, wed: 88, thu: 95, fri: 91, sat: 78, sun: 72 },
-  { zone: "Zone B", mon: 72, tue: 78, wed: 82, thu: 85, fri: 88, sat: 65, sun: 58 },
-  { zone: "Zone C", mon: 95, tue: 98, wed: 96, thu: 92, fri: 94, sat: 85, sun: 80 },
-  { zone: "Zone D", mon: 68, tue: 72, wed: 75, thu: 78, fri: 82, sat: 60, sun: 55 },
+// Power Generation by Zone
+const powerGenerationData = [
+  { zone: "Zone A", before: 85, after: 98, fill: "var(--color-chart-1)" },
+  { zone: "Zone B", before: 72, after: 95, fill: "var(--color-chart-2)" },
+  { zone: "Zone C", before: 68, after: 92, fill: "var(--color-chart-3)" },
+  { zone: "Zone D", before: 78, after: 96, fill: "var(--color-chart-4)" },
+  { zone: "Zone E", before: 82, after: 97, fill: "var(--color-chart-5)" },
 ]
 
-export function AgeDistributionChart() {
+const powerConfig = {
+  before: { label: "Before Cleaning (%)", color: "var(--color-muted-foreground)" },
+  after: { label: "After Cleaning (%)", color: "var(--color-chart-3)" },
+} satisfies ChartConfig
+
+export function DustSensorChart() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -104,38 +117,55 @@ export function AgeDistributionChart() {
       <Card className="glass-card border-border/50">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-primary" />
-            Age Group Distribution
+            <Wind className="h-4 w-4 text-orange-500" />
+            Dust Sensor Readings
           </CardTitle>
-          <CardDescription>Population by age segments (millions)</CardDescription>
+          <CardDescription>Real-time dust accumulation by zone (g/m²)</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={ageConfig} className="h-[260px] w-full">
-            <BarChart data={ageDistributionData} barGap={8}>
+          <ChartContainer config={dustConfig} className="h-[280px] w-full">
+            <AreaChart data={dustSensorData}>
               <defs>
-                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={1} />
-                  <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0.6} />
+                <linearGradient id="dustGradient1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-chart-1)" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="var(--color-chart-1)" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="dustGradient2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-chart-2)" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="var(--color-chart-2)" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="dustGradient3" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-chart-3)" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="var(--color-chart-3)" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="dustGradient4" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-chart-4)" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="var(--color-chart-4)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border/30" vertical={false} />
-              <XAxis dataKey="age" tickLine={false} axisLine={false} className="text-xs" />
+              <XAxis dataKey="time" tickLine={false} axisLine={false} className="text-xs" />
               <YAxis tickLine={false} axisLine={false} className="text-xs" />
               <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="population" radius={[6, 6, 0, 0]}>
-                {ageDistributionData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                ))}
-              </Bar>
-            </BarChart>
+              <ChartLegend content={<ChartLegendContent />} />
+              <Area type="monotone" dataKey="panel1" stroke="var(--color-chart-1)" strokeWidth={2} fill="url(#dustGradient1)" />
+              <Area type="monotone" dataKey="panel2" stroke="var(--color-chart-2)" strokeWidth={2} fill="url(#dustGradient2)" />
+              <Area type="monotone" dataKey="panel3" stroke="var(--color-chart-3)" strokeWidth={2} fill="url(#dustGradient3)" />
+              <Area type="monotone" dataKey="panel4" stroke="var(--color-chart-4)" strokeWidth={2} fill="url(#dustGradient4)" />
+            </AreaChart>
           </ChartContainer>
+          {/* Threshold indicator */}
+          <div className="mt-4 flex items-center justify-between p-3 rounded-lg bg-orange-500/10 border border-orange-500/30">
+            <span className="text-xs text-orange-500 font-medium">Cleaning Threshold: 40 g/m²</span>
+            <span className="text-xs text-muted-foreground">3 zones above threshold</span>
+          </div>
         </CardContent>
       </Card>
     </motion.div>
   )
 }
 
-export function GenderRatioChart() {
+export function TemperatureSensorChart() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -145,51 +175,56 @@ export function GenderRatioChart() {
       <Card className="glass-card border-border/50">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold flex items-center gap-2">
-            <PieChartIcon className="h-4 w-4 text-accent" />
-            Gender Ratio
+            <Thermometer className="h-4 w-4 text-red-500" />
+            Temperature Sensor
           </CardTitle>
-          <CardDescription>Male vs Female population percentage</CardDescription>
+          <CardDescription>Panel vs ambient temperature monitoring (°C)</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={genderConfig} className="h-[260px] w-full">
-            <PieChart>
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                  <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
-                </filter>
-              </defs>
-              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-              <Pie
-                data={genderRatioData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                innerRadius={55}
-                outerRadius={85}
-                strokeWidth={3}
-                stroke="var(--background)"
-                filter="url(#glow)"
-              >
-                {genderRatioData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.fill} />
-                ))}
-              </Pie>
-              <ChartLegend content={<ChartLegendContent nameKey="name" />} />
-            </PieChart>
+          <ChartContainer config={temperatureConfig} className="h-[280px] w-full">
+            <LineChart data={temperatureData}>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border/30" vertical={false} />
+              <XAxis dataKey="time" tickLine={false} axisLine={false} className="text-xs" />
+              <YAxis tickLine={false} axisLine={false} className="text-xs" />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Line
+                type="monotone"
+                dataKey="optimal"
+                stroke="var(--color-chart-3)"
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="ambient"
+                stroke="var(--color-chart-1)"
+                strokeWidth={2}
+                dot={{ fill: "var(--color-chart-1)", strokeWidth: 0, r: 3 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="panel"
+                stroke="var(--color-destructive)"
+                strokeWidth={2}
+                dot={{ fill: "var(--color-destructive)", strokeWidth: 0, r: 3 }}
+              />
+            </LineChart>
           </ChartContainer>
-          <div className="flex justify-center gap-8 mt-2">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-chart-1">51.4%</p>
-              <p className="text-xs text-muted-foreground">Male</p>
+          {/* Temperature status */}
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className="p-2 rounded-lg bg-chart-1/10 border border-chart-1/30 text-center">
+              <p className="text-lg font-bold text-chart-1">28°C</p>
+              <p className="text-[10px] text-muted-foreground">Ambient</p>
             </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-chart-4">48.6%</p>
-              <p className="text-xs text-muted-foreground">Female</p>
+            <div className="p-2 rounded-lg bg-destructive/10 border border-destructive/30 text-center">
+              <p className="text-lg font-bold text-destructive">47°C</p>
+              <p className="text-[10px] text-muted-foreground">Panel Avg</p>
+            </div>
+            <div className="p-2 rounded-lg bg-chart-3/10 border border-chart-3/30 text-center">
+              <p className="text-lg font-bold text-chart-3">25°C</p>
+              <p className="text-[10px] text-muted-foreground">Optimal</p>
             </div>
           </div>
         </CardContent>
@@ -198,7 +233,7 @@ export function GenderRatioChart() {
   )
 }
 
-export function AreaDensityChart() {
+export function VoltageCurrentChart() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -208,40 +243,53 @@ export function AreaDensityChart() {
       <Card className="glass-card border-border/50">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold flex items-center gap-2">
-            <Users className="h-4 w-4 text-chart-3" />
-            Area Density
+            <Zap className="h-4 w-4 text-primary" />
+            Voltage & Current Output
           </CardTitle>
-          <CardDescription>Population density per square kilometer</CardDescription>
+          <CardDescription>Real-time power generation metrics</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={densityConfig} className="h-[260px] w-full">
-            <AreaChart data={areaDensityData}>
+          <ChartContainer config={voltageConfig} className="h-[280px] w-full">
+            <AreaChart data={voltageData}>
               <defs>
-                <linearGradient id="densityGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--color-chart-3)" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="var(--color-chart-3)" stopOpacity={0} />
+                <linearGradient id="voltageGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="currentGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-accent)" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="var(--color-accent)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border/30" vertical={false} />
-              <XAxis dataKey="area" tickLine={false} axisLine={false} className="text-xs" />
-              <YAxis tickLine={false} axisLine={false} className="text-xs" />
+              <XAxis dataKey="time" tickLine={false} axisLine={false} className="text-xs" />
+              <YAxis yAxisId="voltage" tickLine={false} axisLine={false} className="text-xs" />
+              <YAxis yAxisId="current" orientation="right" tickLine={false} axisLine={false} className="text-xs" />
               <ChartTooltip content={<ChartTooltipContent />} />
-              <Area
-                type="monotone"
-                dataKey="density"
-                stroke="var(--color-chart-3)"
-                strokeWidth={2}
-                fill="url(#densityGradient)"
-              />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Area yAxisId="voltage" type="monotone" dataKey="voltage" stroke="var(--color-primary)" strokeWidth={2} fill="url(#voltageGradient)" />
+              <Area yAxisId="current" type="monotone" dataKey="current" stroke="var(--color-accent)" strokeWidth={2} fill="url(#currentGradient)" />
             </AreaChart>
           </ChartContainer>
+          {/* Power output */}
+          <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">Current Power Output</span>
+              </div>
+              <span className="text-lg font-bold text-chart-3">10.78 kW</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </motion.div>
   )
 }
 
-export function DailySurveyChart() {
+export function CleaningStatusChart() {
+  const total = cleaningStatusData.reduce((sum, item) => sum + item.value, 0)
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -251,37 +299,92 @@ export function DailySurveyChart() {
       <Card className="glass-card border-border/50">
         <CardHeader className="pb-4">
           <CardTitle className="text-base font-semibold flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-chart-4" />
-            Daily Survey Completion
+            <Activity className="h-4 w-4 text-chart-3" />
+            Cleaning Status
           </CardTitle>
-          <CardDescription>Surveys completed vs target this week</CardDescription>
+          <CardDescription>Panel cleaning workflow distribution</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={surveyConfig} className="h-[260px] w-full">
-            <LineChart data={dailySurveyData}>
+          <ChartContainer config={cleaningConfig} className="h-[200px] w-full">
+            <PieChart>
+              <defs>
+                <filter id="cleaningGlow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+              <Pie
+                data={cleaningStatusData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={75}
+                strokeWidth={3}
+                stroke="var(--background)"
+                filter="url(#cleaningGlow)"
+              >
+                {cleaningStatusData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} />
+                ))}
+              </Pie>
+              <ChartLegend content={<ChartLegendContent nameKey="name" />} />
+            </PieChart>
+          </ChartContainer>
+          {/* Status summary */}
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            {cleaningStatusData.map((item) => (
+              <div key={item.name} className="flex items-center justify-between p-2 rounded-lg bg-secondary/30">
+                <span className="text-[10px] text-muted-foreground">{item.name}</span>
+                <span className="text-xs font-bold">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  )
+}
+
+export function PowerEfficiencyChart() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.6 }}
+    >
+      <Card className="glass-card border-border/50">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <Zap className="h-4 w-4 text-chart-3" />
+            Cleaning Efficiency Impact
+          </CardTitle>
+          <CardDescription>Power output before vs after cleaning (%)</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer config={powerConfig} className="h-[280px] w-full">
+            <BarChart data={powerGenerationData} barGap={4}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border/30" vertical={false} />
-              <XAxis dataKey="day" tickLine={false} axisLine={false} className="text-xs" />
-              <YAxis tickLine={false} axisLine={false} className="text-xs" />
+              <XAxis dataKey="zone" tickLine={false} axisLine={false} className="text-xs" />
+              <YAxis tickLine={false} axisLine={false} className="text-xs" domain={[0, 100]} />
               <ChartTooltip content={<ChartTooltipContent />} />
               <ChartLegend content={<ChartLegendContent />} />
-              <Line
-                type="monotone"
-                dataKey="target"
-                stroke="var(--color-muted-foreground)"
-                strokeWidth={2}
-                strokeDasharray="5 5"
-                dot={false}
-              />
-              <Line
-                type="monotone"
-                dataKey="completed"
-                stroke="var(--color-chart-3)"
-                strokeWidth={2}
-                dot={{ fill: "var(--color-chart-3)", strokeWidth: 0, r: 4 }}
-                activeDot={{ r: 6, fill: "var(--color-chart-3)" }}
-              />
-            </LineChart>
+              <Bar dataKey="before" radius={[4, 4, 0, 0]} fill="var(--color-muted-foreground)" opacity={0.5} />
+              <Bar dataKey="after" radius={[4, 4, 0, 0]} fill="var(--color-chart-3)" />
+            </BarChart>
           </ChartContainer>
+          {/* Efficiency summary */}
+          <div className="mt-4 p-3 rounded-lg bg-chart-3/10 border border-chart-3/30">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Average Efficiency Gain</span>
+              <span className="text-lg font-bold text-chart-3">+18.4%</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </motion.div>

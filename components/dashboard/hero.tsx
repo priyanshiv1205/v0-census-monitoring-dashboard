@@ -1,15 +1,15 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Activity, Wifi, Database, Cpu, Shield, Zap } from "lucide-react"
+import { Activity, Wifi, Cloud, Cpu, Sun, Bot } from "lucide-react"
 
 const statusIndicators = [
-  { icon: Activity, label: "System Active", status: "online" },
-  { icon: Wifi, label: "Network Connected", status: "online" },
-  { icon: Database, label: "Cloud Sync", status: "online" },
+  { icon: Sun, label: "Solar Active", status: "online" },
+  { icon: Bot, label: "Robots Online", status: "online" },
+  { icon: Wifi, label: "Sensors Live", status: "online" },
+  { icon: Cloud, label: "AWS Connected", status: "online" },
+  { icon: Activity, label: "Data Stream", status: "online" },
   { icon: Cpu, label: "AI Processing", status: "online" },
-  { icon: Shield, label: "Security", status: "online" },
-  { icon: Zap, label: "Edge Computing", status: "online" },
 ]
 
 export function Hero() {
@@ -22,16 +22,16 @@ export function Hero() {
     >
       {/* Background gradient effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-chart-3/10 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-yellow-500/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
       </div>
 
       {/* Floating particles */}
       {[...Array(6)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-primary/50 rounded-full"
+          className="absolute w-1 h-1 bg-yellow-500/50 rounded-full"
           style={{
             left: `${20 + i * 15}%`,
             top: `${30 + (i % 3) * 20}%`,
@@ -56,10 +56,10 @@ export function Hero() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/30"
             >
               <div className="h-2 w-2 rounded-full bg-chart-3 pulse-live" />
-              <span className="text-xs font-medium text-primary">System Online</span>
+              <span className="text-xs font-medium text-yellow-500">System Online</span>
             </motion.div>
 
             <motion.h1
@@ -68,11 +68,11 @@ export function Hero() {
               transition={{ delay: 0.3 }}
               className="text-3xl lg:text-4xl font-bold leading-tight"
             >
-              <span className="bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
-                Real-Time Swarm Intelligence
+              <span className="bg-gradient-to-r from-yellow-500 via-orange-500 to-primary bg-clip-text text-transparent">
+                Solar Panel Monitoring
               </span>
               <br />
-              <span className="text-foreground">for Smart Census Monitoring</span>
+              <span className="text-foreground">& Swarm Robot Cleaning System</span>
             </motion.h1>
 
             <motion.p
@@ -81,8 +81,8 @@ export function Hero() {
               transition={{ delay: 0.4 }}
               className="text-muted-foreground text-base lg:text-lg leading-relaxed"
             >
-              AI-powered robotic swarm system for autonomous population analytics 
-              and field monitoring across urban and rural territories.
+              AI-powered sensor monitoring with autonomous swarm robots for automated 
+              solar panel cleaning. Real-time dust, temperature, voltage, and current analysis.
             </motion.p>
           </div>
 
