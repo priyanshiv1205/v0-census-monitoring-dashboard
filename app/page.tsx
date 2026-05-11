@@ -1,80 +1,102 @@
 "use client"
 
-import { DashboardSidebar } from "@/components/dashboard/sidebar"
-import { DashboardHeader } from "@/components/dashboard/header"
+import { Navbar } from "@/components/dashboard/navbar"
+import { Hero } from "@/components/dashboard/hero"
 import { StatCards } from "@/components/dashboard/stat-cards"
+import { RobotTrackingMap } from "@/components/dashboard/robot-map"
+import { RobotFleetTable } from "@/components/dashboard/robot-fleet"
 import {
-  GenderBarChart,
-  CompletionPieChart,
-  PopulationGrowthChart,
-  RobotActivityChart,
+  AgeDistributionChart,
+  GenderRatioChart,
+  AreaDensityChart,
+  DailySurveyChart,
 } from "@/components/dashboard/charts"
-import { ActivityFeed } from "@/components/dashboard/activity-feed"
-import { ZoneTable } from "@/components/dashboard/zone-table"
-import { useState } from "react"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { AlertsPanel } from "@/components/dashboard/alerts-panel"
+import { CloudStatusPanel } from "@/components/dashboard/cloud-status"
+import { ParticlesBackground } from "@/components/dashboard/particles-background"
+import { useState, useEffect } from "react"
 
 export default function DashboardPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
+  const [currentTime, setCurrentTime] = useState<string>("")
+  
+  useEffect(() => {
+    setCurrentTime(new Date().toLocaleTimeString())
+    const interval = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString())
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+    <div className="min-h-screen bg-background relative">
+      {/* Animated background */}
+      <ParticlesBackground />
 
-      {/* Sidebar */}
-      <div className={cn(
-        "fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
-        <DashboardSidebar />
-      </div>
-
-      {/* Mobile menu button */}
-      <Button
-        variant="outline"
-        size="icon"
-        className="fixed left-4 top-4 z-50 lg:hidden border-border bg-card"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </Button>
+      {/* Navbar */}
+      <Navbar />
 
       {/* Main Content */}
-      <div className="flex-1 lg:pl-64 transition-all duration-300">
-        <DashboardHeader />
+      <main className="relative z-10 pt-20 pb-8 px-4 lg:px-6 max-w-[1800px] mx-auto">
+        {/* Hero Section */}
+        <Hero />
 
-        <main className="p-6 space-y-6">
-          {/* Stat Cards */}
+        {/* Stat Cards */}
+        <section className="mb-6">
           <StatCards />
+        </section>
 
-          {/* Charts Row */}
-          <div className="grid gap-6 lg:grid-cols-2">
-            <GenderBarChart />
-            <CompletionPieChart />
+        {/* Main Grid - Map and Alerts */}
+        <section className="grid gap-6 lg:grid-cols-3 mb-6">
+          <RobotTrackingMap />
+          <AlertsPanel />
+        </section>
+
+        {/* Census Analytics Charts */}
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span className="h-1 w-8 bg-gradient-to-r from-primary to-accent rounded-full" />
+            Census Analytics
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <AgeDistributionChart />
+            <GenderRatioChart />
+            <AreaDensityChart />
+            <DailySurveyChart />
           </div>
+        </section>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            <PopulationGrowthChart />
-            <RobotActivityChart />
-          </div>
+        {/* Robot Fleet Table */}
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span className="h-1 w-8 bg-gradient-to-r from-accent to-chart-3 rounded-full" />
+            Robot Fleet Status
+          </h2>
+          <RobotFleetTable />
+        </section>
 
-          {/* Activity and Table Row */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <ZoneTable />
+        {/* Cloud Integration */}
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span className="h-1 w-8 bg-gradient-to-r from-chart-3 to-chart-4 rounded-full" />
+            Cloud Integration
+          </h2>
+          <CloudStatusPanel />
+        </section>
+
+        {/* Footer */}
+        <footer className="mt-12 pt-6 border-t border-border/50">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-chart-3 pulse-live" />
+              <span className="text-sm text-muted-foreground">
+                System Status: All services operational
+              </span>
             </div>
-            <ActivityFeed />
+            <p className="text-xs text-muted-foreground">
+              Swarm Sense v2.0 | Powered by AWS IoT & AI | Last sync: {currentTime || "Loading..."}
+            </p>
           </div>
-        </main>
-      </div>
+        </footer>
+      </main>
     </div>
   )
 }
